@@ -1,0 +1,19 @@
+.DS_Store
+node_modules/
+.build/
+dist/
+
+# Local/generated history from the original Codex workspace.
+/work/
+/outputs/
+
+# Xcode local state.
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+
+# Built apps and archives should be release assets, not source files.
+*.app
+*.app.zip
+*.xcarchive

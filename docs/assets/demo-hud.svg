@@ -1,0 +1,34 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Video Flow Keys speed HUD demo</title>
+  <desc id="desc">A stylized video player with a glass speed overlay that reads 2.5x in the lower-left corner.</desc>
+  <rect width="1280" height="720" rx="32" fill="#101216"/>
+  <rect x="36" y="36" width="1208" height="648" rx="22" fill="#191D23"/>
+  <path d="M36 160H1244V58C1244 45.85 1234.15 36 1222 36H58C45.85 36 36 45.85 36 58V160Z" fill="#242A32"/>
+  <circle cx="82" cy="86" r="13" fill="#FF5F57"/>
+  <circle cx="124" cy="86" r="13" fill="#FFBD2E"/>
+  <circle cx="166" cy="86" r="13" fill="#28C840"/>
+  <rect x="232" y="66" width="816" height="40" rx="20" fill="#111418"/>
+  <rect x="36" y="160" width="1208" height="524" rx="0" fill="url(#scene)"/>
+  <circle cx="974" cy="276" r="164" fill="#FDBA74" opacity="0.9"/>
+  <circle cx="308" cy="402" r="220" fill="#67E8F9" opacity="0.45"/>
+  <path d="M36 546C172 470 269 513 395 454C563 376 687 422 803 489C926 560 1057 538 1244 438V684H36V546Z" fill="#2DD4BF" opacity="0.38"/>
+  <path d="M36 598C208 551 382 600 538 565C773 512 962 570 1244 500V684H36V598Z" fill="#111827" opacity="0.42"/>
+  <rect x="62" y="604" width="88" height="54" rx="14" fill="url(#hud)" stroke="rgba(255,255,255,0.34)"/>
+  <text x="106" y="640" text-anchor="middle" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="25" font-weight="800">2.5x</text>
+  <rect x="74" y="666" width="1092" height="5" rx="2.5" fill="white" opacity="0.3"/>
+  <rect x="74" y="666" width="392" height="5" rx="2.5" fill="#FF2B4F"/>
+  <circle cx="466" cy="668.5" r="9" fill="#FF2B4F"/>
+  <path d="M92 635L92 613L111 624L92 635Z" fill="white" opacity="0.92"/>
+  <path d="M1184 636H1214V666H1184V636Z" stroke="white" stroke-width="4" opacity="0.9"/>
+  <defs>
+    <linearGradient id="scene" x1="36" y1="160" x2="1244" y2="684" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.48" stop-color="#475569"/>
+      <stop offset="1" stop-color="#18181B"/>
+    </linearGradient>
+    <linearGradient id="hud" x1="62" y1="604" x2="150" y2="658" gradientUnits="userSpaceOnUse">
+      <stop stop-color="rgba(255,255,255,0.34)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.12)"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Video Flow Keys</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Video Flow Keys</h1>
+        <p>S/D/F/E for Safari video.</p>
+      </header>
+
+      <section class="controls" aria-label="Playback controls">
+        <button type="button" data-command="slower">S</button>
+        <button type="button" data-command="default">D</button>
+        <button type="button" data-command="faster">F</button>
+        <button type="button" data-command="skip">E</button>
+      </section>
+
+      <form id="settings-form">
+        <label>
+          <span>YouTube start speed</span>
+          <input id="defaultRate" name="defaultRate" type="number" min="0.1" max="9.9" step="0.1">
+        </label>
+
+        <label>
+          <span>Step</span>
+          <input id="rateStep" name="rateStep" type="number" min="0.01" max="2" step="0.01">
+        </label>
+
+        <label class="checkbox">
+          <input id="autoApplyDefaultOnYouTube" name="autoApplyDefaultOnYouTube" type="checkbox">
+          <span>Apply default on YouTube</span>
+        </label>
+
+        <label class="checkbox">
+          <input id="autoSkipYouTubeAds" name="autoSkipYouTubeAds" type="checkbox">
+          <span>Auto-click YouTube Skip</span>
+        </label>
+
+        <label class="checkbox">
+          <input id="showHud" name="showHud" type="checkbox">
+          <span>Show speed HUD</span>
+        </label>
+      </form>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

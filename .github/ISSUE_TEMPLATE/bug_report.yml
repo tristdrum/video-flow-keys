@@ -1,0 +1,27 @@
+name: Bug report
+description: Report something that is not working.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the website, shortcut, and expected behavior.
+    validations:
+      required: true
+  - type: input
+    id: safari
+    attributes:
+      label: Safari version
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version

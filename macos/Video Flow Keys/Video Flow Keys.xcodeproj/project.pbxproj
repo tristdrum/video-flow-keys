@@ -1,0 +1,617 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C7842E862FD6F453002DC12C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7842E852FD6F453002DC12C /* AppDelegate.swift */; };
+		C7842E8A2FD6F453002DC12C /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = C7842E882FD6F453002DC12C /* Main.html */; };
+		C7842E8C2FD6F453002DC12C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C7842E8B2FD6F453002DC12C /* Icon.png */; };
+		C7842E8E2FD6F453002DC12C /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = C7842E8D2FD6F453002DC12C /* Style.css */; };
+		C7842E902FD6F453002DC12C /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = C7842E8F2FD6F453002DC12C /* Script.js */; };
+		C7842E922FD6F453002DC12C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7842E912FD6F453002DC12C /* ViewController.swift */; };
+		C7842E952FD6F453002DC12C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7842E932FD6F453002DC12C /* Main.storyboard */; };
+		C7842E972FD6F453002DC12C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7842E962FD6F453002DC12C /* Assets.xcassets */; };
+		C7842E9E2FD6F453002DC12C /* Video Flow Keys Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C7842E9D2FD6F453002DC12C /* Video Flow Keys Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C7842EA32FD6F453002DC12C /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7842EA22FD6F453002DC12C /* SafariWebExtensionHandler.swift */; };
+		C7842EB52FD6F453002DC12C /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = C7842EAF2FD6F453002DC12C /* popup.js */; };
+		C7842EB62FD6F453002DC12C /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB02FD6F453002DC12C /* popup.html */; };
+		C7842EB72FD6F453002DC12C /* icons in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB12FD6F453002DC12C /* icons */; };
+		C7842EB82FD6F453002DC12C /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB22FD6F453002DC12C /* manifest.json */; };
+		C7842EB92FD6F453002DC12C /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB32FD6F453002DC12C /* popup.css */; };
+		C7842EBA2FD6F453002DC12C /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB42FD6F453002DC12C /* content.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C7842E9F2FD6F453002DC12C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C7842E7A2FD6F453002DC12C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C7842E9C2FD6F453002DC12C;
+			remoteInfo = "Video Flow Keys Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C7842EAA2FD6F453002DC12C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C7842E9E2FD6F453002DC12C /* Video Flow Keys Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C7842E822FD6F453002DC12C /* Video Flow Keys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Video Flow Keys.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7842E852FD6F453002DC12C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C7842E892FD6F453002DC12C /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		C7842E8B2FD6F453002DC12C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		C7842E8D2FD6F453002DC12C /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		C7842E8F2FD6F453002DC12C /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		C7842E912FD6F453002DC12C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C7842E942FD6F453002DC12C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C7842E962FD6F453002DC12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C7842E982FD6F453002DC12C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7842E9D2FD6F453002DC12C /* Video Flow Keys Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Video Flow Keys Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7842EA22FD6F453002DC12C /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		C7842EA42FD6F453002DC12C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7842EAF2FD6F453002DC12C /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = Resources/popup.js; sourceTree = "<group>"; };
+		C7842EB02FD6F453002DC12C /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = Resources/popup.html; sourceTree = "<group>"; };
+		C7842EB12FD6F453002DC12C /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = Resources/icons; sourceTree = "<group>"; };
+		C7842EB22FD6F453002DC12C /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
+		C7842EB32FD6F453002DC12C /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = Resources/popup.css; sourceTree = "<group>"; };
+		C7842EB42FD6F453002DC12C /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = Resources/content.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C7842E7F2FD6F453002DC12C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7842E9A2FD6F453002DC12C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C7842E792FD6F453002DC12C = {
+			isa = PBXGroup;
+			children = (
+				C7842E842FD6F453002DC12C /* Video Flow Keys */,
+				C7842EA12FD6F453002DC12C /* Video Flow Keys Extension */,
+				C7842E832FD6F453002DC12C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C7842E832FD6F453002DC12C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7842E822FD6F453002DC12C /* Video Flow Keys.app */,
+				C7842E9D2FD6F453002DC12C /* Video Flow Keys Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C7842E842FD6F453002DC12C /* Video Flow Keys */ = {
+			isa = PBXGroup;
+			children = (
+				C7842E852FD6F453002DC12C /* AppDelegate.swift */,
+				C7842E912FD6F453002DC12C /* ViewController.swift */,
+				C7842E932FD6F453002DC12C /* Main.storyboard */,
+				C7842E962FD6F453002DC12C /* Assets.xcassets */,
+				C7842E982FD6F453002DC12C /* Info.plist */,
+				C7842E872FD6F453002DC12C /* Resources */,
+			);
+			path = "Video Flow Keys";
+			sourceTree = "<group>";
+		};
+		C7842E872FD6F453002DC12C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C7842E882FD6F453002DC12C /* Main.html */,
+				C7842E8B2FD6F453002DC12C /* Icon.png */,
+				C7842E8D2FD6F453002DC12C /* Style.css */,
+				C7842E8F2FD6F453002DC12C /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C7842EA12FD6F453002DC12C /* Video Flow Keys Extension */ = {
+			isa = PBXGroup;
+			children = (
+				C7842EAE2FD6F453002DC12C /* Resources */,
+				C7842EA22FD6F453002DC12C /* SafariWebExtensionHandler.swift */,
+				C7842EA42FD6F453002DC12C /* Info.plist */,
+			);
+			path = "Video Flow Keys Extension";
+			sourceTree = "<group>";
+		};
+		C7842EAE2FD6F453002DC12C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C7842EAF2FD6F453002DC12C /* popup.js */,
+				C7842EB02FD6F453002DC12C /* popup.html */,
+				C7842EB12FD6F453002DC12C /* icons */,
+				C7842EB22FD6F453002DC12C /* manifest.json */,
+				C7842EB32FD6F453002DC12C /* popup.css */,
+				C7842EB42FD6F453002DC12C /* content.js */,
+			);
+			name = Resources;
+			path = "Video Flow Keys Extension";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C7842E812FD6F453002DC12C /* Video Flow Keys */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7842EAB2FD6F453002DC12C /* Build configuration list for PBXNativeTarget "Video Flow Keys" */;
+			buildPhases = (
+				C7842E7E2FD6F453002DC12C /* Sources */,
+				C7842E7F2FD6F453002DC12C /* Frameworks */,
+				C7842E802FD6F453002DC12C /* Resources */,
+				C7842EAA2FD6F453002DC12C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7842EA02FD6F453002DC12C /* PBXTargetDependency */,
+			);
+			name = "Video Flow Keys";
+			packageProductDependencies = (
+			);
+			productName = "Video Flow Keys";
+			productReference = C7842E822FD6F453002DC12C /* Video Flow Keys.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C7842E9C2FD6F453002DC12C /* Video Flow Keys Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7842EA72FD6F453002DC12C /* Build configuration list for PBXNativeTarget "Video Flow Keys Extension" */;
+			buildPhases = (
+				C7842E992FD6F453002DC12C /* Sources */,
+				C7842E9A2FD6F453002DC12C /* Frameworks */,
+				C7842E9B2FD6F453002DC12C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Video Flow Keys Extension";
+			packageProductDependencies = (
+			);
+			productName = "Video Flow Keys Extension";
+			productReference = C7842E9D2FD6F453002DC12C /* Video Flow Keys Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C7842E7A2FD6F453002DC12C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					C7842E812FD6F453002DC12C = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					C7842E9C2FD6F453002DC12C = {
+						CreatedOnToolsVersion = 26.5;
+					};
+				};
+			};
+			buildConfigurationList = C7842E7D2FD6F453002DC12C /* Build configuration list for PBXProject "Video Flow Keys" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C7842E792FD6F453002DC12C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C7842E832FD6F453002DC12C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C7842E812FD6F453002DC12C /* Video Flow Keys */,
+				C7842E9C2FD6F453002DC12C /* Video Flow Keys Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C7842E802FD6F453002DC12C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7842E8C2FD6F453002DC12C /* Icon.png in Resources */,
+				C7842E952FD6F453002DC12C /* Main.storyboard in Resources */,
+				C7842E902FD6F453002DC12C /* Script.js in Resources */,
+				C7842E8A2FD6F453002DC12C /* Main.html in Resources */,
+				C7842E972FD6F453002DC12C /* Assets.xcassets in Resources */,
+				C7842E8E2FD6F453002DC12C /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7842E9B2FD6F453002DC12C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7842EBA2FD6F453002DC12C /* content.js in Resources */,
+				C7842EB92FD6F453002DC12C /* popup.css in Resources */,
+				C7842EB82FD6F453002DC12C /* manifest.json in Resources */,
+				C7842EB72FD6F453002DC12C /* icons in Resources */,
+				C7842EB52FD6F453002DC12C /* popup.js in Resources */,
+				C7842EB62FD6F453002DC12C /* popup.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C7842E7E2FD6F453002DC12C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7842E922FD6F453002DC12C /* ViewController.swift in Sources */,
+				C7842E862FD6F453002DC12C /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7842E992FD6F453002DC12C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7842EA32FD6F453002DC12C /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C7842EA02FD6F453002DC12C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C7842E9C2FD6F453002DC12C /* Video Flow Keys Extension */;
+			targetProxy = C7842E9F2FD6F453002DC12C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C7842E882FD6F453002DC12C /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C7842E892FD6F453002DC12C /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		C7842E932FD6F453002DC12C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C7842E942FD6F453002DC12C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C7842EA52FD6F453002DC12C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C7842EA62FD6F453002DC12C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		C7842EA82FD6F453002DC12C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Video Flow Keys Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Video Flow Keys Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tristdrum.VideoFlowKeys.Extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C7842EA92FD6F453002DC12C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Video Flow Keys Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Video Flow Keys Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tristdrum.VideoFlowKeys.Extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C7842EAC2FD6F453002DC12C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Video Flow Keys/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Video Flow Keys";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tristdrum.VideoFlowKeys;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C7842EAD2FD6F453002DC12C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Video Flow Keys/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Video Flow Keys";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tristdrum.VideoFlowKeys;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C7842E7D2FD6F453002DC12C /* Build configuration list for PBXProject "Video Flow Keys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7842EA52FD6F453002DC12C /* Debug */,
+				C7842EA62FD6F453002DC12C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7842EA72FD6F453002DC12C /* Build configuration list for PBXNativeTarget "Video Flow Keys Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7842EA82FD6F453002DC12C /* Debug */,
+				C7842EA92FD6F453002DC12C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7842EAB2FD6F453002DC12C /* Build configuration list for PBXNativeTarget "Video Flow Keys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7842EAC2FD6F453002DC12C /* Debug */,
+				C7842EAD2FD6F453002DC12C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C7842E7A2FD6F453002DC12C /* Project object */;
+}

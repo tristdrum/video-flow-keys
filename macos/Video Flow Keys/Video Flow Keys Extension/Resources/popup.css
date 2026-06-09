@@ -1,0 +1,85 @@
+:root {
+  color-scheme: light dark;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+body {
+  width: 250px;
+  margin: 0;
+  color: CanvasText;
+  background: Canvas;
+}
+
+main {
+  padding: 14px;
+}
+
+header {
+  margin-bottom: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+p {
+  margin: 4px 0 0;
+  color: color-mix(in srgb, CanvasText 62%, Canvas);
+  font-size: 12px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+button {
+  min-height: 36px;
+  border: 1px solid color-mix(in srgb, CanvasText 22%, Canvas);
+  border-radius: 7px;
+  color: CanvasText;
+  background: color-mix(in srgb, CanvasText 7%, Canvas);
+  font: 700 14px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+button:active {
+  background: color-mix(in srgb, CanvasText 14%, Canvas);
+}
+
+form {
+  display: grid;
+  gap: 10px;
+}
+
+label {
+  display: grid;
+  grid-template-columns: 1fr 76px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 6px;
+  border: 1px solid color-mix(in srgb, CanvasText 22%, Canvas);
+  border-radius: 6px;
+  color: CanvasText;
+  background: Canvas;
+  font: inherit;
+}
+
+.checkbox {
+  grid-template-columns: 16px 1fr;
+}
+
+input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}

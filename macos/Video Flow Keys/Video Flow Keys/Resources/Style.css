@@ -1,0 +1,43 @@
+html {
+    min-height: 100%;
+    color-scheme: light dark;
+    font: -apple-system-body;
+}
+
+body {
+    box-sizing: border-box;
+    min-height: 100vh;
+    margin: 0;
+    padding: 32px;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 16px;
+    color: CanvasText;
+    background: Canvas;
+    text-align: center;
+}
+
+img {
+    width: 96px;
+    height: 96px;
+}
+
+p {
+    max-width: 360px;
+    margin: 0;
+}
+
+button {
+    padding: 8px 14px;
+    border-radius: 7px;
+}
+
+body:not(.state-on):not(.state-off) .state-on,
+body:not(.state-on):not(.state-off) .state-off,
+body.state-on .state-unknown,
+body.state-on .state-off,
+body.state-off .state-unknown,
+body.state-off .state-on {
+    display: none;
+}
