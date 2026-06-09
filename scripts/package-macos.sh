@@ -21,6 +21,6 @@ mkdir -p "$STAGE_DIR"
 ditto --norsrc --noextattr "$APP_SOURCE" "$STAGE_DIR/Video Flow Keys.app"
 xattr -cr "$STAGE_DIR/Video Flow Keys.app"
 codesign --verify --deep --strict --verbose=2 "$STAGE_DIR/Video Flow Keys.app"
-ditto -c -k --keepParent --norsrc --noextattr "$STAGE_DIR/Video Flow Keys.app" "$DIST_DIR/Video Flow Keys.app.zip"
+ditto -c -k --keepParent --norsrc --noextattr "$STAGE_DIR/Video Flow Keys.app" "$DIST_DIR/Video-Flow-Keys.app.zip"
 
-echo "Packaged $DIST_DIR/Video Flow Keys.app.zip"
+echo "Packaged $DIST_DIR/Video-Flow-Keys.app.zip"

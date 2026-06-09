@@ -3,7 +3,7 @@
 ## Download
 
 1. Go to the latest GitHub Release.
-2. Download `Video Flow Keys.app.zip`.
+2. Download `Video-Flow-Keys.app.zip`.
 3. Unzip it.
 4. Move `Video Flow Keys.app` to `/Applications`.
 

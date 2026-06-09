@@ -13,8 +13,8 @@ codesign --verify --deep --strict --verbose=2 "${TMPDIR:-/tmp}/video-flow-keys-p
 
 Then:
 
-- Inspect `dist/Video Flow Keys.app.zip`.
+- Inspect `dist/Video-Flow-Keys.app.zip`.
 - Confirm `web-extension/` and macOS extension resources match.
 - Confirm Safari live smoke on YouTube.
 - Create a GitHub Release.
-- Upload `dist/Video Flow Keys.app.zip`.
+- Upload `dist/Video-Flow-Keys.app.zip`.

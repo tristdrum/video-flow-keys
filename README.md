@@ -20,7 +20,7 @@ handling, and the speed HUD.
 
 ## Install
 
-Download the latest `Video Flow Keys.app.zip` from
+Download the latest `Video-Flow-Keys.app.zip` from
 [Releases](https://github.com/tristdrum/video-flow-keys/releases), unzip it, and
 move `Video Flow Keys.app` to `/Applications`.
 
