@@ -16,7 +16,7 @@
     fasterKey: "f",
     skipKey: "e",
     rateStep: 0.1,
-    defaultRate: 2.5,
+    defaultRate: 2,
     resetRate: 1,
     minRate: 0.1,
     maxRate: 9.9,
@@ -32,9 +32,17 @@
     ".ytp-ad-skip-button-container button",
     "button[aria-label='Skip']",
     "button[aria-label^='Skip ad']",
-    "button[aria-label*='Skip ad']",
+    "button[aria-label*='Skip ad']"
+  ];
+
+  const YOUTUBE_AD_CLOSE_SELECTORS = [
     ".ytp-ad-overlay-close-button"
   ];
+
+  const YOUTUBE_AD_FAST_RATE = 16;
+  const YOUTUBE_AD_END_PADDING_SECONDS = 0.05;
+  const YOUTUBE_AD_BYPASS_INTERVAL_MS = 250;
+  const YOUTUBE_AD_BYPASS_STYLE_ID = "video-flow-keys-ad-bypass-style";
 
   const extensionApi = getExtensionApi(root);
   let settings = { ...DEFAULT_SETTINGS };
@@ -43,6 +51,8 @@
   let skipTimer = null;
   let observer = null;
   let currentUrl = "";
+  let adBypassSession = null;
+  let lastContentRate = null;
   const defaultApplications = new WeakMap();
 
   function getExtensionApi(scope) {
@@ -66,6 +76,7 @@
     currentUrl = String(root.location && root.location.href ? root.location.href : "");
 
     loadSettings().then(() => {
+      lastContentRate = settings.defaultRate;
       root.document.addEventListener("keydown", handleKeyDown, true);
       root.document.addEventListener("play", maybeApplyDefaultFromEvent, true);
       root.document.addEventListener("loadedmetadata", maybeApplyDefaultFromEvent, true);
@@ -76,6 +87,7 @@
       installUrlWatcher();
       maybeApplyDefaultToVideos();
       maybeStartYouTubeAutoSkip();
+      runYouTubeAdBypass();
     });
   }
 
@@ -158,6 +170,7 @@
       settings = normalizeSettings({ ...settings, ...patch });
       maybeApplyDefaultToVideos();
       maybeStartYouTubeAutoSkip();
+      runYouTubeAdBypass();
     });
   }
 
@@ -215,7 +228,7 @@
       maybeApplyDefaultToVideos();
 
       if (settings.autoSkipYouTubeAds && isYouTubeHost()) {
-        clickYouTubeSkipButton();
+        runYouTubeAdBypass();
       }
     });
 
@@ -233,8 +246,10 @@
       }
 
       currentUrl = nextUrl;
+      adBypassSession = null;
       maybeApplyDefaultToVideos(true);
       maybeStartYouTubeAutoSkip();
+      runYouTubeAdBypass();
     }, 500);
   }
 
@@ -248,7 +263,8 @@
       return;
     }
 
-    skipTimer = root.setInterval(clickYouTubeSkipButton, 350);
+    skipTimer = root.setInterval(runYouTubeAdBypass, YOUTUBE_AD_BYPASS_INTERVAL_MS);
+    runYouTubeAdBypass();
   }
 
   function handleKeyDown(event) {
@@ -350,11 +366,13 @@
 
     const signature = getVideoSignature(video);
     if (!force && defaultApplications.get(video) === signature) {
+      rememberContentRate(video.playbackRate);
       return false;
     }
 
     applyRateToVideos([video], settings.defaultRate);
     defaultApplications.set(video, signature);
+    rememberContentRate(settings.defaultRate);
     showHud(formatRate(settings.defaultRate));
     return true;
   }
@@ -386,6 +404,10 @@
 
     for (const video of videos) {
       defaultApplications.set(video, getVideoSignature(video));
+    }
+
+    if (isYouTubeHost() && !isYouTubeAdShowing()) {
+      rememberContentRate(targetRate);
     }
 
     showHud(formatRate(targetRate));
@@ -452,13 +474,177 @@
   }
 
   function skipAd() {
-    if (isYouTubeHost() && clickYouTubeSkipButton()) {
-      showHud("Skipped");
+    if (isYouTubeHost() && runYouTubeAdBypass({ manual: true })) {
+      showHud("Skipping ad");
       return true;
     }
 
-    showHud("No skip button");
+    showHud("No ad");
     return false;
+  }
+
+  function runYouTubeAdBypass(options) {
+    if (!root.document || !isYouTubeHost()) {
+      removeYouTubeAdBypassStyle();
+      adBypassSession = null;
+      return false;
+    }
+
+    const adShowing = isYouTubeAdShowing();
+    const video = getActiveVideo();
+
+    if (!adShowing) {
+      const restored = restoreAfterYouTubeAd(video);
+      rememberActiveContentRate();
+      removeYouTubeAdBypassStyle();
+      return restored;
+    }
+
+    const manual = Boolean(options && options.manual);
+    const session = getAdBypassSession(video);
+    installYouTubeAdBypassStyle();
+
+    const clickedSkip = clickYouTubeSkipButton();
+    const advancedVideo = advanceYouTubeAdVideos(manual);
+    const closedOverlay = clickYouTubeAdCloseButton();
+
+    session.lastAttemptAt = Date.now();
+    return clickedSkip || advancedVideo || closedOverlay || manual;
+  }
+
+  function getAdBypassSession(video) {
+    if (adBypassSession) {
+      return adBypassSession;
+    }
+
+    adBypassSession = {
+      restoreRate: getRestorableContentRate(),
+      restoreMuted: video ? Boolean(video.muted) : null,
+      startedAt: Date.now(),
+      lastAttemptAt: 0
+    };
+
+    return adBypassSession;
+  }
+
+  function getRestorableContentRate() {
+    const rememberedRate = Number(lastContentRate);
+    if (Number.isFinite(rememberedRate) && rememberedRate > 0) {
+      return clampRate(rememberedRate);
+    }
+
+    return clampRate(settings.defaultRate);
+  }
+
+  function restoreAfterYouTubeAd(video) {
+    if (!adBypassSession) {
+      return false;
+    }
+
+    const restoreRate = getRestorableContentRate();
+    if (video && Number.isFinite(restoreRate) && restoreRate > 0) {
+      applyRateToVideos([video], restoreRate);
+      defaultApplications.set(video, getVideoSignature(video));
+      rememberContentRate(restoreRate);
+    }
+
+    if (video && typeof adBypassSession.restoreMuted === "boolean") {
+      video.muted = adBypassSession.restoreMuted;
+    }
+
+    adBypassSession = null;
+    return true;
+  }
+
+  function rememberActiveContentRate() {
+    if (!isYouTubeHost() || isYouTubeAdShowing()) {
+      return false;
+    }
+
+    const video = getActiveVideo();
+    if (!video) {
+      return false;
+    }
+
+    return rememberContentRate(video.playbackRate);
+  }
+
+  function rememberContentRate(rate) {
+    const number = Number(rate);
+    if (!Number.isFinite(number) || number <= 0 || number > settings.maxRate) {
+      return false;
+    }
+
+    lastContentRate = number;
+    return true;
+  }
+
+  function advanceYouTubeAdVideos(manual) {
+    const videos = getVideos();
+    if (!videos.length) {
+      return false;
+    }
+
+    let advanced = false;
+    const player = getYouTubePlayer();
+
+    for (const video of videos) {
+      advanced = advanceYouTubeAdVideo(video, manual) || advanced;
+    }
+
+    if (player && typeof player.playVideo === "function") {
+      try {
+        player.playVideo();
+      } catch (error) {
+        // YouTube's player API is best-effort here.
+      }
+    }
+
+    return advanced;
+  }
+
+  function advanceYouTubeAdVideo(video, manual) {
+    if (!video) {
+      return false;
+    }
+
+    let advanced = false;
+
+    try {
+      video.muted = true;
+      video.playbackRate = YOUTUBE_AD_FAST_RATE;
+      video.defaultPlaybackRate = YOUTUBE_AD_FAST_RATE;
+      advanced = true;
+    } catch (error) {
+      return false;
+    }
+
+    const duration = Number(video.duration);
+    const currentTime = Number(video.currentTime);
+    if (Number.isFinite(duration) && duration > 0.5) {
+      const targetTime = Math.max(0, duration - YOUTUBE_AD_END_PADDING_SECONDS);
+      if (!Number.isFinite(currentTime) || currentTime < targetTime - 0.01) {
+        try {
+          video.currentTime = targetTime;
+          advanced = true;
+        } catch (error) {
+          // Some ad media rejects seeking; speed and mute still help.
+        }
+      }
+    }
+
+    if (manual || video.paused || video.ended) {
+      try {
+        const playResult = video.play();
+        if (playResult && typeof playResult.catch === "function") {
+          playResult.catch(() => {});
+        }
+      } catch (error) {
+        // Autoplay policy can reject play(); the next user gesture will retry.
+      }
+    }
+
+    return advanced;
   }
 
   function clickYouTubeSkipButton() {
@@ -468,14 +654,75 @@
 
     for (const selector of YOUTUBE_SKIP_SELECTORS) {
       const candidates = Array.from(root.document.querySelectorAll(selector));
-      const button = candidates.find(isClickableElement);
+      const button = candidates.find((candidate) => isClickableElement(candidate) && isLikelyYouTubeSkipButton(candidate));
       if (button) {
-        button.click();
+        clickElement(button);
         return true;
       }
     }
 
     return false;
+  }
+
+  function clickYouTubeAdCloseButton() {
+    if (!root.document || !isYouTubeHost()) {
+      return false;
+    }
+
+    for (const selector of YOUTUBE_AD_CLOSE_SELECTORS) {
+      const candidates = Array.from(root.document.querySelectorAll(selector));
+      const button = candidates.find(isClickableElement);
+      if (button) {
+        clickElement(button);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function clickElement(element) {
+    if (!element) {
+      return false;
+    }
+
+    for (const type of ["pointerover", "pointerdown", "mousedown", "pointerup", "mouseup"]) {
+      try {
+        element.dispatchEvent(new root.MouseEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          view: root
+        }));
+      } catch (error) {
+        // Safari may not expose every synthetic event constructor in extension worlds.
+      }
+    }
+
+    try {
+      element.click();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function isLikelyYouTubeSkipButton(element) {
+    if (!element) {
+      return false;
+    }
+
+    const label = [
+      element.className,
+      element.innerText,
+      element.textContent,
+      typeof element.getAttribute === "function" ? element.getAttribute("aria-label") : ""
+    ].join(" ").toLowerCase();
+
+    if (label.includes("skip navigation")) {
+      return false;
+    }
+
+    return /\bskip\b/.test(label) && (label.includes("ad") || label.includes("ytp-skip"));
   }
 
   function isClickableElement(element) {
@@ -569,7 +816,44 @@
       return false;
     }
 
-    return Boolean(root.document.querySelector(".html5-video-player.ad-showing, .ad-showing"));
+    const player = getYouTubePlayer();
+    if (player && player.classList && player.classList.contains("ad-showing")) {
+      return true;
+    }
+
+    return Boolean(root.document.querySelector(".html5-video-player.ad-showing"));
+  }
+
+  function installYouTubeAdBypassStyle() {
+    if (!root.document || root.document.getElementById(YOUTUBE_AD_BYPASS_STYLE_ID)) {
+      return;
+    }
+
+    const style = root.document.createElement("style");
+    style.id = YOUTUBE_AD_BYPASS_STYLE_ID;
+    style.textContent = `
+      .html5-video-player.ad-showing video,
+      .html5-video-player.ad-showing .ytp-ad-image-overlay,
+      .html5-video-player.ad-showing .ytp-ad-player-overlay,
+      .html5-video-player.ad-showing .ytp-ad-overlay-container,
+      .html5-video-player.ad-showing .ytp-ad-text,
+      .html5-video-player.ad-showing .ytp-ad-button-vm,
+      .html5-video-player.ad-showing .ytp-ad-companion-slot {
+        opacity: 0 !important;
+      }
+    `;
+    root.document.documentElement.appendChild(style);
+  }
+
+  function removeYouTubeAdBypassStyle() {
+    if (!root.document) {
+      return;
+    }
+
+    const style = root.document.getElementById(YOUTUBE_AD_BYPASS_STYLE_ID);
+    if (style) {
+      style.remove();
+    }
   }
 
   function showHud(message) {
@@ -667,6 +951,7 @@
     clampNumber,
     clampRate,
     formatRate,
+    isLikelyYouTubeSkipButton,
     normalizeKey,
     normalizeSettings,
     shouldIgnoreKeyTarget,

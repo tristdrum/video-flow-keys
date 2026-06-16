@@ -10,6 +10,7 @@ test("normalizes Dynamo-style default keys", () => {
   assert.equal(settings.defaultKey, "d");
   assert.equal(settings.fasterKey, "f");
   assert.equal(settings.skipKey, "e");
+  assert.equal(settings.defaultRate, 2);
   assert.equal(settings.resetRate, 1);
 });
 
@@ -45,3 +46,33 @@ test("formats readable playback rates", () => {
   assert.equal(videoFlowKeys.formatRate(1), "1x");
   assert.equal(videoFlowKeys.formatRate(2.5), "2.5x");
 });
+
+test("recognizes real YouTube skip buttons without treating overlay close as skip", () => {
+  const skipButton = fakeElement({
+    className: "ytp-skip-ad-button ytp-ad-component--clickable",
+    text: "Skip"
+  });
+  const overlayClose = fakeElement({
+    className: "ytp-ad-overlay-close-button",
+    ariaLabel: "Close"
+  });
+  const skipNavigation = fakeElement({
+    text: "Skip navigation",
+    ariaLabel: "Skip navigation"
+  });
+
+  assert.equal(videoFlowKeys.isLikelyYouTubeSkipButton(skipButton), true);
+  assert.equal(videoFlowKeys.isLikelyYouTubeSkipButton(overlayClose), false);
+  assert.equal(videoFlowKeys.isLikelyYouTubeSkipButton(skipNavigation), false);
+});
+
+function fakeElement({ className = "", text = "", ariaLabel = "" }) {
+  return {
+    className,
+    innerText: text,
+    textContent: text,
+    getAttribute(name) {
+      return name === "aria-label" ? ariaLabel : "";
+    }
+  };
+}

@@ -12,11 +12,11 @@ It was built end to end with Codex after I missed the old Dynamo Safari workflow
 | `S` | Slow the active video by the configured step. |
 | `D` | Reset the active video to `1x`. |
 | `F` | Speed the active video up by the configured step. |
-| `E` | Click YouTube's visible skip-ad button when one is present. |
+| `E` | Bypass the current YouTube ad. |
 
-On YouTube, videos start at `2.5x` by default. The popup lets you change the
-start speed, step size, YouTube auto-start behavior, visible skip-button
-handling, and the speed HUD.
+On YouTube, videos start at `2x` by default. The popup lets you change the
+start speed, step size, YouTube auto-start behavior, ad bypass behavior, and the
+speed HUD.
 
 ## Install
 

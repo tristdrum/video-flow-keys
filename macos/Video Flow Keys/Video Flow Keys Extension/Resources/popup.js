@@ -7,7 +7,7 @@
     fasterKey: "f",
     skipKey: "e",
     rateStep: 0.1,
-    defaultRate: 2.5,
+    defaultRate: 2,
     minRate: 0.1,
     maxRate: 9.9,
     autoApplyDefaultOnYouTube: true,

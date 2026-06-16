@@ -33,7 +33,7 @@ The goal was to recreate the old Dynamo Safari extension workflow:
 
 The verified local behavior before publication:
 
-- YouTube auto-start HUD displayed `2.5x`.
+- YouTube auto-start HUD displayed `2x`.
 - `D` displayed `1x`.
 - `F` displayed `1.1x`.
 - `S` displayed `1x`.
