@@ -43,6 +43,8 @@
   const YOUTUBE_AD_END_PADDING_SECONDS = 0.05;
   const YOUTUBE_AD_BYPASS_INTERVAL_MS = 250;
   const YOUTUBE_AD_BYPASS_STYLE_ID = "video-flow-keys-ad-bypass-style";
+  const RED_BULL_PLAYER_HOST = "redbull.studio.easelive.tv";
+  const FRAME_SHORTCUT_MESSAGE_TYPE = "video-flow-keys:shortcut";
 
   const extensionApi = getExtensionApi(root);
   let settings = { ...DEFAULT_SETTINGS };
@@ -80,6 +82,7 @@
       root.document.addEventListener("keydown", handleKeyDown, true);
       root.document.addEventListener("play", maybeApplyDefaultFromEvent, true);
       root.document.addEventListener("loadedmetadata", maybeApplyDefaultFromEvent, true);
+      root.addEventListener("message", handleFrameShortcutMessage, true);
 
       installStorageListener();
       installMessageListener();
@@ -280,20 +283,76 @@
       return;
     }
 
-    let handled = false;
-    if (action === "slower") {
-      handled = changeRate(-settings.rateStep);
-    } else if (action === "default") {
-      handled = setRate(settings.resetRate, "default");
-    } else if (action === "faster") {
-      handled = changeRate(settings.rateStep);
-    } else if (action === "skip") {
-      handled = skipAd();
+    let handled = performShortcutAction(action);
+    if (!handled && shouldRelayShortcutToParent(action)) {
+      handled = relayShortcutToParent(action);
     }
 
     if (handled) {
       event.preventDefault();
       event.stopImmediatePropagation();
+    }
+  }
+
+  function performShortcutAction(action) {
+    if (action === "slower") {
+      return changeRate(-settings.rateStep);
+    }
+    if (action === "default") {
+      return setRate(settings.resetRate, "default");
+    }
+    if (action === "faster") {
+      return changeRate(settings.rateStep);
+    }
+    if (action === "skip") {
+      return skipAd();
+    }
+    return false;
+  }
+
+  function shouldRelayShortcutToParent(action) {
+    return ["slower", "default", "faster"].includes(action) && isRedBullPlayerFrame();
+  }
+
+  function relayShortcutToParent(action) {
+    if (!root.parent || root.parent === root || typeof root.parent.postMessage !== "function") {
+      return false;
+    }
+
+    try {
+      root.parent.postMessage({
+        type: FRAME_SHORTCUT_MESSAGE_TYPE,
+        action
+      }, "*");
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function handleFrameShortcutMessage(event) {
+    const message = event && event.data;
+    if (!message || message.type !== FRAME_SHORTCUT_MESSAGE_TYPE || !isRedBullPlayerOrigin(event.origin)) {
+      return;
+    }
+
+    if (!["slower", "default", "faster"].includes(message.action)) {
+      return;
+    }
+
+    performShortcutAction(message.action);
+  }
+
+  function isRedBullPlayerFrame() {
+    const host = String(root.location && root.location.hostname ? root.location.hostname : "").toLowerCase();
+    return host === RED_BULL_PLAYER_HOST;
+  }
+
+  function isRedBullPlayerOrigin(origin) {
+    try {
+      return new URL(String(origin || "")).hostname.toLowerCase() === RED_BULL_PLAYER_HOST;
+    } catch (error) {
+      return false;
     }
   }
 
@@ -821,7 +880,26 @@
       return [];
     }
 
-    return Array.from(root.document.querySelectorAll("video"));
+    const videos = [];
+    const visitedRoots = new Set();
+
+    collectVideos(root.document);
+    return videos;
+
+    function collectVideos(searchRoot) {
+      if (!searchRoot || visitedRoots.has(searchRoot) || !searchRoot.querySelectorAll) {
+        return;
+      }
+
+      visitedRoots.add(searchRoot);
+      videos.push(...Array.from(searchRoot.querySelectorAll("video")));
+
+      for (const element of Array.from(searchRoot.querySelectorAll("*"))) {
+        if (element.shadowRoot) {
+          collectVideos(element.shadowRoot);
+        }
+      }
+    }
   }
 
   function isVisibleVideo(video) {

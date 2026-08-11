@@ -50,6 +50,54 @@ test("controls generic HTML video without forcing the YouTube default", async ()
   assert.equal(browser.video.playbackRate, 1);
 });
 
+test("controls a Red Bull video inside an open shadow root", async () => {
+  const browser = await createBrowserWorld({
+    hostname: "www.redbull.tv",
+    videoInShadowRoot: true
+  });
+
+  assert.equal(browser.video.playbackRate, 1);
+
+  const faster = browser.keydown("f");
+  assert.equal(browser.video.playbackRate, 1.1);
+  assert.equal(faster.prevented, true);
+  assert.equal(faster.stopped, true);
+
+  browser.keydown("d");
+  assert.equal(browser.video.playbackRate, 1);
+});
+
+test("relays Red Bull player-frame shortcuts to the parent page", async () => {
+  const frame = await createBrowserWorld({
+    hostname: "redbull.studio.easelive.tv",
+    isEmbedded: true,
+    noVideo: true
+  });
+
+  const faster = frame.keydown("f");
+  assert.equal(faster.prevented, true);
+  assert.equal(faster.stopped, true);
+  assert.equal(frame.postedMessages.length, 1);
+  assert.equal(frame.postedMessages[0].message.type, "video-flow-keys:shortcut");
+  assert.equal(frame.postedMessages[0].message.action, "faster");
+  assert.equal(frame.postedMessages[0].targetOrigin, "*");
+});
+
+test("applies relayed Red Bull shortcuts to the shadow-root video", async () => {
+  const browser = await createBrowserWorld({
+    hostname: "www.redbull.tv",
+    videoInShadowRoot: true
+  });
+
+  browser.dispatchMessage({
+    type: "video-flow-keys:shortcut",
+    action: "faster"
+  }, "https://redbull.studio.easelive.tv");
+
+  assert.equal(browser.video.playbackRate, 1.1);
+  assert.equal(browser.hud().textContent, "1.1x");
+});
+
 test("keeps auto-bypass disabled until E is pressed", async () => {
   const browser = await createBrowserWorld({
     adShowing: true,
@@ -122,8 +170,10 @@ async function createBrowserWorld(options = {}) {
   const skipButtonVisible = options.skipButtonVisible !== false;
   let nextTimerId = 1;
   const listeners = new Map();
+  const windowListeners = new Map();
   const intervals = new Map();
   const elementsById = new Map();
+  const postedMessages = [];
 
   const video = {
     tagName: "VIDEO",
@@ -147,6 +197,14 @@ async function createBrowserWorld(options = {}) {
 
   const skipButton = fakeButton("ytp-skip-ad-button", "Skip ad");
   const closeButton = fakeButton("ytp-ad-overlay-close-button", "Close");
+  const videoHost = {
+    tagName: "RBUP-VIDEO-TV-STREAMING",
+    shadowRoot: {
+      querySelectorAll(selector) {
+        return selector === "video" || selector === "*" ? [video] : [];
+      }
+    }
+  };
   const player = {
     classList: {
       contains(name) {
@@ -201,7 +259,10 @@ async function createBrowserWorld(options = {}) {
     },
     querySelectorAll(selector) {
       if (selector === "video") {
-        return [video];
+        return options.videoInShadowRoot || options.noVideo ? [] : [video];
+      }
+      if (selector === "*") {
+        return options.videoInShadowRoot ? [videoHost] : [];
       }
       if (selector === ".ytp-ad-overlay-close-button") {
         return adShowing ? [closeButton] : [];
@@ -230,7 +291,13 @@ async function createBrowserWorld(options = {}) {
   const storedSettings = { ...(options.storedSettings || {}) };
   const storageListeners = [];
   const context = {
+    URL,
     document,
+    addEventListener(type, listener) {
+      const registered = windowListeners.get(type) || [];
+      registered.push(listener);
+      windowListeners.set(type, registered);
+    },
     location: {
       href: `https://${options.hostname || "www.youtube.com"}/watch?v=test`,
       hostname: options.hostname || "www.youtube.com"
@@ -284,6 +351,11 @@ async function createBrowserWorld(options = {}) {
       intervals.delete(id);
     }
   };
+  context.parent = options.isEmbedded ? {
+    postMessage(message, targetOrigin) {
+      postedMessages.push({ message, targetOrigin });
+    }
+  } : context;
   context.globalThis = context;
   context.window = context;
 
@@ -294,6 +366,7 @@ async function createBrowserWorld(options = {}) {
     video,
     skipButton,
     closeButton,
+    postedMessages,
     setAdShowing(value) {
       adShowing = Boolean(value);
     },
@@ -326,6 +399,11 @@ async function createBrowserWorld(options = {}) {
         listener(event);
       }
       return state;
+    },
+    dispatchMessage(data, origin) {
+      for (const listener of windowListeners.get("message") || []) {
+        listener({ data, origin });
+      }
     },
     hud() {
       return elementsById.get("video-flow-keys-hud") || null;
