@@ -43,7 +43,7 @@
     return new Promise((resolve) => {
       extensionApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const tab = tabs && tabs[0];
-        if (!tab || !tab.id) {
+        if (!tab || tab.id === undefined || tab.id === null) {
           resolve(false);
           return;
         }

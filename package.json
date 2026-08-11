@@ -7,7 +7,7 @@
     "check": "node --check web-extension/content.js && node --check web-extension/popup.js",
     "test": "node --test test/*.test.js",
     "sync:macos": "scripts/sync-macos-extension.sh",
-    "build:macos": "xcodebuild -project 'macos/Video Flow Keys/Video Flow Keys.xcodeproj' -scheme 'Video Flow Keys' -configuration Debug -derivedDataPath /tmp/video-flow-keys-deriveddata ENABLE_DEBUG_DYLIB=NO build",
+    "build:macos": "scripts/build-macos.sh",
     "package:macos": "scripts/package-macos.sh"
   }
 }

@@ -87,7 +87,6 @@
       installUrlWatcher();
       maybeApplyDefaultToVideos();
       maybeStartYouTubeAutoSkip();
-      runYouTubeAdBypass();
     });
   }
 
@@ -170,7 +169,6 @@
       settings = normalizeSettings({ ...settings, ...patch });
       maybeApplyDefaultToVideos();
       maybeStartYouTubeAutoSkip();
-      runYouTubeAdBypass();
     });
   }
 
@@ -249,7 +247,6 @@
       adBypassSession = null;
       maybeApplyDefaultToVideos(true);
       maybeStartYouTubeAutoSkip();
-      runYouTubeAdBypass();
     }, 500);
   }
 
@@ -504,12 +501,30 @@
     const session = getAdBypassSession(video);
     installYouTubeAdBypassStyle();
 
+    if (session.mediaTouched && hasYouTubeAdMediaTransitioned(session, video)) {
+      const restored = restoreAfterYouTubeAd(video);
+      removeYouTubeAdBypassStyle();
+      return restored;
+    }
+
     const clickedSkip = clickYouTubeSkipButton();
+    if (clickedSkip) {
+      session.mediaTouched = true;
+      session.skipClickedAt = Date.now();
+      session.lastAttemptAt = session.skipClickedAt;
+      return true;
+    }
+
+    if (session.skipClickedAt && Date.now() - session.skipClickedAt < 1500) {
+      return true;
+    }
+
     const advancedVideo = advanceYouTubeAdVideos(manual);
     const closedOverlay = clickYouTubeAdCloseButton();
 
+    session.mediaTouched = session.mediaTouched || advancedVideo;
     session.lastAttemptAt = Date.now();
-    return clickedSkip || advancedVideo || closedOverlay || manual;
+    return advancedVideo || closedOverlay || manual;
   }
 
   function getAdBypassSession(video) {
@@ -520,11 +535,32 @@
     adBypassSession = {
       restoreRate: getRestorableContentRate(),
       restoreMuted: video ? Boolean(video.muted) : null,
+      mediaIdentity: getYouTubeMediaIdentity(video),
+      mediaTouched: false,
+      skipClickedAt: 0,
       startedAt: Date.now(),
       lastAttemptAt: 0
     };
 
     return adBypassSession;
+  }
+
+  function getYouTubeMediaIdentity(video) {
+    if (!video) {
+      return "";
+    }
+
+    const source = video.currentSrc || video.src || "";
+    const duration = Number(video.duration);
+    return `${source}|${Number.isFinite(duration) ? duration.toFixed(3) : "unknown"}`;
+  }
+
+  function hasYouTubeAdMediaTransitioned(session, video) {
+    if (!session || !video) {
+      return false;
+    }
+
+    return getYouTubeMediaIdentity(video) !== session.mediaIdentity;
   }
 
   function getRestorableContentRate() {
