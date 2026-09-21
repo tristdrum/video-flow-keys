@@ -20,8 +20,4 @@ xattr -cr "$STAGE_DIR/Video Flow Keys.app"
 codesign --verify --deep --strict --verbose=2 "$STAGE_DIR/Video Flow Keys.app"
 ditto -c -k --keepParent --norsrc --noextattr "$STAGE_DIR/Video Flow Keys.app" "$DIST_DIR/Video-Flow-Keys.app.zip"
 
-# xcodebuild registers its product for local development. A packaged install must
-# be the only registered copy or Safari can show duplicate extension entries.
-pluginkit -r "$APP_SOURCE/Contents/PlugIns/Video Flow Keys Extension.appex" 2>/dev/null || true
-
 echo "Packaged $DIST_DIR/Video-Flow-Keys.app.zip"

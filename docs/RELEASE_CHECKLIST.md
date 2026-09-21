@@ -17,7 +17,9 @@ VIDEO_FLOW_KEYS_UNSIGNED=1 npm run build:macos
 The first command deliberately updates the committed resource mirror; subsequent
 checks are read-only against source. Commit source and mirror together. CI runs
 the same verification plus native tests and an unsigned macOS build without
-provisioning. Output is under this checkout's `.build/deriveddata`.
+provisioning. Output is under this checkout's `.build/deriveddata`. The build
+script unregisters its own product after compilation so it does not displace
+the installed Safari extension; opening the app registers it when intended.
 
 Before release, complete the approved plan's real Safari checks: ordinary
 shortcuts, editable inputs, YouTube ad transitions with speed/mute restoration,

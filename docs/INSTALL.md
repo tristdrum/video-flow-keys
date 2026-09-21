@@ -1,5 +1,8 @@
 # Install Video Flow Keys
 
+Reload an existing video tab after updating the app to load its new extension
+code. Other open tabs can remain as they are.
+
 ## Signed app and private TestFlight beta
 
 Version 1.1.0 and newer require macOS 12 or newer. Sponsor skipping additionally

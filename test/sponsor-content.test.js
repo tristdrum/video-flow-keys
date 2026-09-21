@@ -175,15 +175,51 @@ test("missing media waits while paused or ended finite media can be analyzed", (
   }
 });
 
-test("infinite duration reports live without caption reads or repeated automatic attempts", async () => {
+test("infinite duration reports live without reads, then finite metadata permits one caption request", async () => {
   const h = createContent({ enabled: true, duration: Infinity });
   assert.equal(h.status().status, "live");
   assert.equal(h.latestRead(), undefined);
   assert.equal(h.timerCount(12000), 0);
   await h.receive();
-  h.video.duration = 120;
+  h.tick();
   h.tick();
   assert.equal(h.latestRead(), undefined);
+  assert.equal(h.pending.length, 0);
+  h.video.duration = 120;
+  h.tick();
+  assert.equal(h.status().status, "reading-captions");
+  assert.equal(h.latestRead().videoId, VIDEO_A);
+  h.tick();
+  assert.equal(h.posted.filter((entry) => entry.message.type === "read").length, 1);
+  assert.equal(h.pending.length, 0);
+});
+
+test("live-to-VOD navigation tolerates the previous video's infinite media duration", () => {
+  const h = createContent({ enabled: true, duration: Infinity });
+  h.navigate(VIDEO_B);
+  assert.equal(h.status().status, "live");
+  assert.equal(h.latestRead(), undefined);
+  assert.equal(h.timerCount(12000), 0);
+  h.tick();
+  assert.equal(h.latestRead(), undefined);
+  h.video.duration = 120;
+  h.tick();
+  assert.equal(h.status().status, "reading-captions");
+  assert.equal(h.latestRead().videoId, VIDEO_B);
+  h.tick();
+  assert.equal(h.posted.filter((entry) => entry.message.type === "read").length, 1);
+});
+
+test("a correlated live response from the page remains terminal despite later finite metadata", async () => {
+  const h = createContent({ enabled: true });
+  await h.receive({ type: "error", error: "live" });
+  assert.equal(h.status().status, "live");
+  h.video.duration = Infinity;
+  h.tick();
+  h.video.duration = 120;
+  h.tick();
+  assert.equal(h.status().status, "live");
+  assert.equal(h.posted.filter((entry) => entry.message.type === "read").length, 1);
   assert.equal(h.pending.length, 0);
 });
 

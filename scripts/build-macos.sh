@@ -24,3 +24,8 @@ fi
 
 "$ROOT_DIR/scripts/sync-macos-extension.sh" --check
 xcodebuild "${BUILD_ARGS[@]}" build
+
+# Compiling should not replace the user's active Safari extension with this
+# checkout's build product. Opening/installing the app registers it explicitly.
+BUILT_EXTENSION="$DERIVED_DATA/Build/Products/$CONFIGURATION/Video Flow Keys.app/Contents/PlugIns/Video Flow Keys Extension.appex"
+pluginkit -r "$BUILT_EXTENSION" 2>/dev/null || true

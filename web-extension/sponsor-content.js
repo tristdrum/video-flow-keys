@@ -87,8 +87,9 @@
     const snapshot = getSnapshot();
     if (!snapshot || snapshot.adShowing) return;
     if (snapshot.duration === Infinity) {
-      pendingRead = false;
-      captionReceived = true;
+      // SPA navigation can retain the previous live video's media briefly.
+      // Keep waiting for finite metadata; a matching page-bridge live result
+      // remains terminal once an actual caption request has been made.
       status = "live";
       return;
     }
