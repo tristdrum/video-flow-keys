@@ -359,6 +359,7 @@ async function createBrowserWorld(options = {}) {
   context.globalThis = context;
   context.window = context;
 
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, "..", "web-extension", "settings.js"), "utf8"), context);
   vm.runInNewContext(contentScript, context, { filename: "content.js" });
   await new Promise((resolve) => setImmediate(resolve));
 

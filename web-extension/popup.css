@@ -4,7 +4,7 @@
 }
 
 body {
-  width: 250px;
+  width: 290px;
   margin: 0;
   color: CanvasText;
   background: Canvas;
@@ -83,3 +83,12 @@ input[type="checkbox"] {
   height: 14px;
   margin: 0;
 }
+
+.sponsors { margin-top: 16px; padding-top: 14px; border-top: 1px solid color-mix(in srgb, CanvasText 18%, Canvas); }
+h2 { margin: 0 0 10px; font-size: 13px; }
+.sponsors p { line-height: 1.4; margin-top: 8px; }
+.key-label { display: block; margin: 12px 0 5px; }
+input[type="password"] { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid color-mix(in srgb, CanvasText 22%, Canvas); border-radius: 7px; background: Canvas; color: CanvasText; font: inherit; }
+.key-actions { display: flex; gap: 7px; margin-top: 8px; }
+.key-actions button { flex: 1; min-height: 30px; font-size: 12px; font-weight: 500; }
+button:disabled { opacity: 0.45; }

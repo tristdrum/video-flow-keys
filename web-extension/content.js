@@ -10,20 +10,8 @@
 })(typeof globalThis !== "undefined" ? globalThis : window, function createVideoFlowKeys(root) {
   "use strict";
 
-  const DEFAULT_SETTINGS = Object.freeze({
-    slowerKey: "s",
-    defaultKey: "d",
-    fasterKey: "f",
-    skipKey: "e",
-    rateStep: 0.1,
-    defaultRate: 2,
-    resetRate: 1,
-    minRate: 0.1,
-    maxRate: 9.9,
-    autoApplyDefaultOnYouTube: true,
-    autoSkipYouTubeAds: true,
-    showHud: true
-  });
+  const sharedSettings = root.VideoFlowSettings || require("./settings.js");
+  const { DEFAULT_SETTINGS, normalizeSettings, normalizeKey, clampNumber } = sharedSettings;
 
   const YOUTUBE_SKIP_SELECTORS = [
     ".ytp-ad-skip-button",
@@ -91,47 +79,6 @@
       maybeApplyDefaultToVideos();
       maybeStartYouTubeAutoSkip();
     });
-  }
-
-  function normalizeSettings(candidate) {
-    const next = { ...DEFAULT_SETTINGS, ...(candidate || {}) };
-
-    next.slowerKey = normalizeKey(next.slowerKey, DEFAULT_SETTINGS.slowerKey);
-    next.defaultKey = normalizeKey(next.defaultKey, DEFAULT_SETTINGS.defaultKey);
-    next.fasterKey = normalizeKey(next.fasterKey, DEFAULT_SETTINGS.fasterKey);
-    next.skipKey = normalizeKey(next.skipKey, DEFAULT_SETTINGS.skipKey);
-    next.rateStep = clampNumber(next.rateStep, 0.01, 2, DEFAULT_SETTINGS.rateStep);
-    next.defaultRate = clampNumber(next.defaultRate, next.minRate, next.maxRate, DEFAULT_SETTINGS.defaultRate);
-    next.resetRate = clampNumber(next.resetRate, next.minRate, next.maxRate, DEFAULT_SETTINGS.resetRate);
-    next.minRate = clampNumber(next.minRate, 0.05, 1, DEFAULT_SETTINGS.minRate);
-    next.maxRate = clampNumber(next.maxRate, 1, 16, DEFAULT_SETTINGS.maxRate);
-    next.autoApplyDefaultOnYouTube = Boolean(next.autoApplyDefaultOnYouTube);
-    next.autoSkipYouTubeAds = Boolean(next.autoSkipYouTubeAds);
-    next.showHud = Boolean(next.showHud);
-
-    if (next.defaultRate < next.minRate) {
-      next.defaultRate = next.minRate;
-    }
-
-    if (next.defaultRate > next.maxRate) {
-      next.defaultRate = next.maxRate;
-    }
-
-    return next;
-  }
-
-  function normalizeKey(value, fallback) {
-    const key = String(value || "").trim().toLowerCase();
-    return key.length === 1 ? key : fallback;
-  }
-
-  function clampNumber(value, min, max, fallback) {
-    const number = Number(value);
-    if (!Number.isFinite(number)) {
-      return fallback;
-    }
-
-    return Math.min(max, Math.max(min, number));
   }
 
   function clampRate(value, activeSettings) {

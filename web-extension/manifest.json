@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Video Flow Keys",
-  "version": "0.1.0",
-  "description": "Local video speed shortcuts for Safari, inspired by the Dynamo workflow.",
+  "version": "1.1.0",
+  "description": "Safari video speed shortcuts with optional TypeSafe sponsor skipping and undo.",
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "nativeMessaging"
   ],
   "host_permissions": [
     "http://*/*",
@@ -20,6 +21,9 @@
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png"
     }
+  },
+  "background": {
+    "service_worker": "background.js"
   },
   "icons": {
     "16": "icons/icon-16.png",
@@ -36,10 +40,24 @@
         "https://*/*"
       ],
       "js": [
+        "settings.js",
         "content.js"
       ],
       "run_at": "document_idle",
       "all_frames": true
+    },
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["youtube-page.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["sponsor-core.js", "sponsor-playback.js", "sponsor-content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
     }
   ]
 }
