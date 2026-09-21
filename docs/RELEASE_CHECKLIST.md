@@ -32,9 +32,10 @@ unskipped at each run's boundaries, rather than only the classifier labels.
 
 ## Version, sign, and merge
 
-- Align package, manifest, app, and extension marketing versions. Inspect the
-  existing App Store Connect app before choosing the next unused build number;
-  keep app and extension build numbers identical.
+- Align package, manifest, app, and extension marketing versions. Choose an
+  unused build number after inspecting App Store Connect, or let Xcode manage
+  it during upload. Keep app and extension build numbers identical and record
+  the number Apple accepted.
 - Preserve `com.tristdrum.VideoFlowKeys` and
   `com.tristdrum.VideoFlowKeys.Extension`, with the existing Tech Local signing
   team. Provide its team identifier through `VIDEO_FLOW_KEYS_DEVELOPMENT_TEAM`
@@ -89,6 +90,14 @@ configuration, validate it, and upload it. Preserve the existing app record,
 bundle identifiers, signing team, and **Tech Local Core** group. Update beta
 notes and privacy information for optional title/caption analysis and BYOK;
 submit for beta review when App Store Connect requires it.
+
+The configured Xcode account can upload through `xcodebuild -exportArchive`
+even when the browser needs a fresh sign-in. Its export options use
+`method: app-store-connect`, `destination: upload`, `signingStyle: automatic`,
+the approved `teamID`, `manageAppVersionAndBuildNumber: true`, and
+`uploadSymbols: true`. Leave `testFlightInternalTestingOnly` false for the
+existing external group. An upload alone does not submit a public App Store
+release or prove external testers can install it.
 
 Inspect processing, review, and group availability. An accepted upload is not
 proof testers can install it. If Apple is still processing or reviewing, report
