@@ -20,6 +20,7 @@
   let attachedVideo = null;
   let classifying = false;
   let captionReceived = false;
+  let pendingRead = false;
 
   const controller = playback.createController({ getSnapshot,
     seek(time) { const video = getVideo(); if (video) video.currentTime = time; },
@@ -72,13 +73,31 @@
     requestId = root.crypto.randomUUID();
     classifying = false;
     captionReceived = false;
+    pendingRead = enabled && Boolean(videoId);
     results = [];
     duration = 0;
     clearViews();
     controller.reset(videoId);
     controller.setEnabled(enabled);
-    status = enabled ? (videoId ? "reading-captions" : "unsupported-page") : "disabled";
-    if (!enabled || !videoId) return;
+    status = enabled ? (videoId ? "waiting-player" : "unsupported-page") : "disabled";
+    beginCaptionRead();
+  }
+  function beginCaptionRead() {
+    if (!pendingRead || !enabled || !videoId || currentVideoId() !== videoId) return;
+    const snapshot = getSnapshot();
+    if (!snapshot || snapshot.adShowing) return;
+    if (snapshot.duration === Infinity) {
+      pendingRead = false;
+      captionReceived = true;
+      status = "live";
+      return;
+    }
+    // Cold Safari tabs can expose a video before its metadata is available.
+    // Start acquisition once content is ready, without playing it or touching
+    // captions during an ad. The existing ticker supplies the readiness check.
+    if (!Number.isFinite(snapshot.duration) || snapshot.duration <= 0) return;
+    pendingRead = false;
+    status = "reading-captions";
     const ownRequest = requestId;
     post("read");
     timeout = root.setTimeout(() => {
@@ -91,7 +110,7 @@
   }
   async function receive(event) {
     const message = event.data;
-    if (!enabled || event.source !== root || event.origin !== root.location.origin ||
+    if (!enabled || pendingRead || event.source !== root || event.origin !== root.location.origin ||
         message?.source !== CHANNEL || message.requestId !== requestId || message.videoId !== videoId ||
         currentVideoId() !== videoId || captionReceived) return;
     if (message.type === "error") {
@@ -217,6 +236,7 @@
   root.setInterval(() => {
     if (currentVideoId() !== videoId) restart();
     if (enabled && videoId) {
+      beginCaptionRead();
       attachVideo();
       renderHeatmap();
       controller.tick();

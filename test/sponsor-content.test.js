@@ -38,14 +38,17 @@ function createContent(options = {}) {
   let runtimeListener;
   let serial = 0;
   const location = new URL(`https://www.youtube.com/watch?v=${VIDEO_A}`);
-  const video = Object.assign(element("video"), { currentTime: 0, duration: 120, paused: false, seeking: false, ended: false, currentSrc: "synthetic-media" });
+  const video = Object.assign(element("video"), { currentTime: 0, duration: options.duration === undefined ? 120 : options.duration,
+    readyState: options.readyState === undefined ? 4 : options.readyState, paused: options.paused === true,
+    seeking: false, ended: options.ended === true, currentSrc: "synthetic-media" });
   const bar = element();
-  const player = Object.assign(element(), { classList: { contains() { return false; } } });
+  const adClasses = new Set(options.adClasses || []);
+  const player = Object.assign(element(), { classList: { contains(name) { return adClasses.has(name); } } });
   const world = {
     location, URL, crypto: { randomUUID() { return `request-${++serial}`; } },
     VideoFlowSponsors: core, VideoFlowSponsorPlayback: playback,
     document: {
-      querySelector(selector) { return selector === "#movie_player video" ? video : selector === "#movie_player" ? player : selector === "#movie_player .ytp-progress-bar" ? bar : null; },
+      querySelector(selector) { return selector === "#movie_player video" ? (options.noVideo ? null : video) : selector === "#movie_player" ? player : selector === "#movie_player .ytp-progress-bar" ? bar : null; },
       createElement: element
     },
     setTimeout(callback, ms) { const id = ++serial; timers.set(id, { callback, ms }); return id; },
@@ -92,7 +95,11 @@ function createContent(options = {}) {
     request.callback(response || { ok: true, videoId: request.message.videoId, segments: request.message.segments.map(({ id, start, end }) => ({ id, start, end, probability: 0.95, category: "sponsor" })) });
     await flush();
   }
-  return { world, video, bar, player, messages, posted, pending, latestRead, receive, dispatch, status, setEnabled, tick, navigate, runTimer, finish, runtimeListener };
+  return { world, video, bar, player, messages, posted, pending, latestRead, receive, dispatch, status, setEnabled, tick, navigate, runTimer, finish, runtimeListener,
+    timerCount: (ms) => [...timers.values()].filter((timer) => timer.ms === ms).length,
+    setVideoAvailable: (value) => { options.noVideo = !value; },
+    setAdClass: (name, value) => { if (value) adClasses.add(name); else adClasses.delete(name); }
+  };
 }
 
 test("sponsor content is opt-in and never reads captions or requests analysis while disabled", async () => {
@@ -105,6 +112,111 @@ test("sponsor content is opt-in and never reads captions or requests analysis wh
   assert.equal(h.status().status, "reading-captions");
   assert.equal(h.latestRead().videoId, VIDEO_A);
   assert.ok(h.posted.every((entry) => entry.origin === "https://www.youtube.com"));
+});
+
+test("a cold Safari video waits for metadata, then reads captions once without starting playback", async () => {
+  const h = createContent({ enabled: true, duration: NaN, readyState: 0, paused: true });
+  assert.equal(h.status().status, "waiting-player");
+  assert.equal(h.latestRead(), undefined);
+  assert.equal(h.timerCount(12000), 0);
+  h.runTimer(12000);
+  h.tick();
+  assert.equal(h.status().status, "waiting-player");
+  await h.receive();
+  assert.equal(h.pending.length, 0);
+  h.video.duration = 548.981;
+  h.video.readyState = 4;
+  h.tick();
+  assert.equal(h.status().status, "reading-captions");
+  assert.equal(h.latestRead().videoId, VIDEO_A);
+  assert.equal(h.timerCount(12000), 1);
+  assert.equal(h.video.paused, true);
+  assert.equal(h.video.currentTime, 0);
+  h.tick();
+  h.tick();
+  assert.equal(h.posted.filter((entry) => entry.message.type === "read").length, 1);
+  h.dispatch({ duration: 548.981 });
+  await flush();
+  await h.finish();
+  assert.equal(h.status().status, "ready");
+});
+
+test("both YouTube ad states defer caption acquisition until content metadata is ready", () => {
+  for (const adClass of ["ad-showing", "ad-interrupting"]) {
+    const h = createContent({ enabled: true, adClasses: [adClass], duration: 30 });
+    assert.equal(h.status().status, "waiting-player");
+    assert.equal(h.latestRead(), undefined);
+    assert.equal(h.timerCount(12000), 0);
+    h.tick();
+    assert.equal(h.latestRead(), undefined);
+    h.video.duration = NaN;
+    h.setAdClass(adClass, false);
+    h.tick();
+    assert.equal(h.latestRead(), undefined);
+    h.video.duration = 120;
+    h.tick();
+    assert.equal(h.status().status, "reading-captions");
+    assert.equal(h.posted.filter((entry) => entry.message.type === "read").length, 1);
+    assert.equal(h.video.currentTime, 0);
+  }
+});
+
+test("missing media waits while paused or ended finite media can be analyzed", () => {
+  const missing = createContent({ enabled: true, noVideo: true });
+  assert.equal(missing.status().status, "waiting-player");
+  assert.equal(missing.latestRead(), undefined);
+  missing.setVideoAvailable(true);
+  missing.tick();
+  assert.equal(missing.status().status, "reading-captions");
+  for (const media of [{ paused: true }, { ended: true }]) {
+    const h = createContent({ enabled: true, ...media });
+    assert.equal(h.status().status, "reading-captions");
+    assert.ok(h.latestRead());
+  }
+});
+
+test("infinite duration reports live without caption reads or repeated automatic attempts", async () => {
+  const h = createContent({ enabled: true, duration: Infinity });
+  assert.equal(h.status().status, "live");
+  assert.equal(h.latestRead(), undefined);
+  assert.equal(h.timerCount(12000), 0);
+  await h.receive();
+  h.video.duration = 120;
+  h.tick();
+  assert.equal(h.latestRead(), undefined);
+  assert.equal(h.pending.length, 0);
+});
+
+test("navigation and disablement cancel pending readiness and reject the old video", async () => {
+  const h = createContent({ enabled: true, duration: NaN });
+  h.navigate(VIDEO_B);
+  assert.equal(h.status().status, "waiting-player");
+  assert.ok(h.posted.some((entry) => entry.message.type === "cancel" && entry.message.videoId === VIDEO_A));
+  h.video.duration = 120;
+  h.tick();
+  assert.equal(h.latestRead().videoId, VIDEO_B);
+  await h.receive({ videoId: VIDEO_A, requestId: "request-1" });
+  assert.equal(h.pending.length, 0);
+  const disabled = createContent({ enabled: true, duration: NaN });
+  disabled.setEnabled(false);
+  disabled.video.duration = 120;
+  disabled.tick();
+  assert.equal(disabled.status().status, "disabled");
+  assert.equal(disabled.latestRead(), undefined);
+});
+
+test("an actual terminal caption failure never restarts acquisition when metadata or ad state changes", async () => {
+  const h = createContent({ enabled: true });
+  await h.receive({ type: "error", error: "no-captions" });
+  h.setAdClass("ad-showing", true);
+  h.video.duration = NaN;
+  h.tick();
+  h.setAdClass("ad-showing", false);
+  h.video.duration = 120;
+  h.tick();
+  assert.equal(h.status().status, "captions-unavailable");
+  assert.equal(h.posted.filter((entry) => entry.message.type === "read").length, 1);
+  assert.equal(h.pending.length, 0);
 });
 
 test("content rejects cross-origin, other-window, uncorrelated and other-video messages", async () => {

@@ -102,6 +102,7 @@
   const retryButton = root.document.getElementById("retry-analysis");
   const statuses = {
     disabled: "Sponsor analysis is off.", "unsupported-page": "Open a YouTube video to analyze sponsors.",
+    "waiting-player": "Waiting for the video to be ready…",
     "reading-captions": "Reading captions…", analyzing: "Looking for sponsors…",
     "captions-unavailable": "Captions unavailable. Playback is unchanged.", live: "Live streams are not analyzed.",
     "key-unavailable": "Save a TypeSafe key to analyze sponsors.", authentication: "TypeSafe rejected the key. Replace it and try again.",
