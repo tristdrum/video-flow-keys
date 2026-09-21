@@ -99,6 +99,14 @@ the approved `teamID`, `manageAppVersionAndBuildNumber: true`, and
 existing external group. An upload alone does not submit a public App Store
 release or prove external testers can install it.
 
+Run archive/export with normal file-creation permissions (`umask 022`). A
+restrictive process-wide `umask 077` makes generated installer contents readable
+only by the owner and fails Apple's package signature verification. Protect a
+saved upload log separately by creating it first and applying `chmod 600`;
+do not make the package itself private through its file modes. A macOS Keychain
+signing prompt needs the user's password and one-time Allow; do not change the
+key's access rules to bypass it.
+
 Inspect processing, review, and group availability. An accepted upload is not
 proof testers can install it. If Apple is still processing or reviewing, report
 the pending state and use one temporary same-task follow-up to complete the
