@@ -1,11 +1,15 @@
 {
   "name": "video-flow-keys",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "check": "node --check web-extension/content.js && node --check web-extension/popup.js",
+    "check": "node scripts/check-source.js",
+    "check:manifest": "node scripts/check-manifest.js",
+    "check:resources": "scripts/sync-macos-extension.sh --check",
     "test": "node --test test/*.test.js",
+    "test:native": "scripts/test-native.sh",
+    "verify": "npm run check && npm test && npm run check:manifest && npm run check:resources",
     "sync:macos": "scripts/sync-macos-extension.sh",
     "build:macos": "scripts/build-macos.sh",
     "package:macos": "scripts/package-macos.sh"

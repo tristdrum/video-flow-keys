@@ -2,6 +2,9 @@
 node_modules/
 .build/
 dist/
+.env
+.env.*
+!.env.example
 
 # Local/generated history from the original Codex workspace.
 /work/
@@ -17,3 +20,8 @@ DerivedData/
 *.app
 *.app.zip
 *.xcarchive
+*.ipa
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile

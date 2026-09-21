@@ -1,37 +1,58 @@
 # Install Video Flow Keys
 
-## Download
+## Signed app and private TestFlight beta
 
-1. Go to the latest GitHub Release.
-2. Download `Video-Flow-Keys.app.zip`.
-3. Unzip it.
-4. Move `Video Flow Keys.app` to `/Applications`.
+Version 1.1.0 and newer require macOS 12 or newer. Sponsor skipping additionally
+requires Safari 18 or newer; ordinary playback controls remain independent.
 
-## Enable In Safari
+Existing private beta testers can install the available build in TestFlight.
+For a signed local app, replace `Video Flow Keys.app` in `/Applications` and open it.
+Then open **Safari → Settings → Extensions**, enable **Video Flow Keys**, and
+grant website access. Signed installations do not need Safari's unsigned
+extensions setting.
 
-This first release is unsigned, so Safari hides it unless unsigned extensions
-are allowed.
+When updating a local build, preserve the known-good app first and replace the
+whole bundle. Do not copy a new bundle over the existing directory: leftover
+frameworks can invalidate its signature. Verify the replacement using the
+[release checklist](RELEASE_CHECKLIST.md) and restore the backup if verification
+fails.
 
-1. Open `/Applications/Video Flow Keys.app`.
-2. Open Safari.
-3. Open Safari Settings.
-4. Go to the Developer pane.
-5. Enable **Allow unsigned extensions**.
-6. Go to the Extensions pane.
-7. Enable **Video Flow Keys**.
-8. Grant website access when Safari asks.
+If the extension is missing, open the installed app and restart Safari. If Safari
+shows duplicate entries after development builds, use the targeted registration
+steps in [the release checklist](RELEASE_CHECKLIST.md); preserve the installed
+app and other active worktrees.
 
-If Safari does not show the extension, quit and reopen Safari, then open the app
-again from `/Applications`.
+## Historical unsigned GitHub release
+
+The GitHub `v0.1.0` `Video-Flow-Keys.app.zip` is the original unsigned release.
+Unzip it, move the app to `/Applications`, and open it. Enable **Allow unsigned
+extensions** in Safari's Developer settings before enabling the extension. This
+release contains the original playback controls, not sponsor analysis.
 
 ## Use
 
-Click a video once so the page has focus, then use:
+Click a video once so its page has focus, then use:
 
 - `S` to slow down.
 - `D` to reset to `1x`.
 - `F` to speed up.
-- `E` to click YouTube's visible skip button.
+- `E` to bypass a supported YouTube ad.
 
-The current speed appears for about two seconds in the lower-left of the video,
-just above the control bar.
+The popup controls speed defaults, shortcut keys, ad bypass, and the playback
+HUD. Text inputs keep normal typing behavior.
+
+## Optional sponsor skipping
+
+Requires Safari 18 or newer and a standard YouTube watch page with usable
+captions. Open the extension popup, enter your own TypeSafe API key, save it, and
+enable **Skip sponsors**. Read the [privacy note](PRIVACY.md): this sends the
+current video's title and captions to TypeSafe and can use your API quota.
+
+The timeline heatmap shows estimated sponsor probability. Segments meeting the
+automatic-skip threshold are skipped with an **Undo** action. Undo returns to
+the skipped point and permits that segment to play in the current viewing
+session. Manually replaying a skipped segment also avoids an immediate skip loop.
+
+Unavailable captions, live streams, unsupported Safari versions, or analysis
+errors leave playback controls working. Disable **Skip sponsors** to stop
+analysis, or use **Remove key** to delete the native Keychain entry.

@@ -23,6 +23,15 @@
 		C7842EB82FD6F453002DC12C /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB22FD6F453002DC12C /* manifest.json */; };
 		C7842EB92FD6F453002DC12C /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB32FD6F453002DC12C /* popup.css */; };
 		C7842EBA2FD6F453002DC12C /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = C7842EB42FD6F453002DC12C /* content.js */; };
+		A01A00000000000000000002 /* TypeSafeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000001 /* TypeSafeService.swift */; };
+		A01A00000000000000000004 /* TypeSafeKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000003 /* TypeSafeKeychain.swift */; };
+		A01B00000000000000000010 /* settings.js in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000010 /* settings.js */; };
+		A01B00000000000000000011 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000011 /* background.js */; };
+		A01B00000000000000000012 /* sponsor-core.js in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000012 /* sponsor-core.js */; };
+		A01B00000000000000000013 /* sponsor-playback.js in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000013 /* sponsor-playback.js */; };
+		A01B00000000000000000014 /* sponsor-content.js in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000014 /* sponsor-content.js */; };
+		A01B00000000000000000015 /* youtube-page.js in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000015 /* youtube-page.js */; };
+		A01B00000000000000000016 /* THIRD_PARTY_NOTICES.md in Resources */ = {isa = PBXBuildFile; fileRef = A01A00000000000000000016 /* THIRD_PARTY_NOTICES.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +78,16 @@
 		C7842EB22FD6F453002DC12C /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
 		C7842EB32FD6F453002DC12C /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = Resources/popup.css; sourceTree = "<group>"; };
 		C7842EB42FD6F453002DC12C /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = Resources/content.js; sourceTree = "<group>"; };
+		A01A00000000000000000001 /* TypeSafeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSafeService.swift; sourceTree = "<group>"; };
+		A01A00000000000000000003 /* TypeSafeKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSafeKeychain.swift; sourceTree = "<group>"; };
+		A01A00000000000000000010 /* settings.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "settings.js"; path = "Resources/settings.js"; sourceTree = "<group>"; };
+		A01A00000000000000000011 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "background.js"; path = "Resources/background.js"; sourceTree = "<group>"; };
+		A01A00000000000000000012 /* sponsor-core.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "sponsor-core.js"; path = "Resources/sponsor-core.js"; sourceTree = "<group>"; };
+		A01A00000000000000000013 /* sponsor-playback.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "sponsor-playback.js"; path = "Resources/sponsor-playback.js"; sourceTree = "<group>"; };
+		A01A00000000000000000014 /* sponsor-content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "sponsor-content.js"; path = "Resources/sponsor-content.js"; sourceTree = "<group>"; };
+		A01A00000000000000000015 /* youtube-page.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "youtube-page.js"; path = "Resources/youtube-page.js"; sourceTree = "<group>"; };
+		A01A00000000000000000016 /* THIRD_PARTY_NOTICES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = "THIRD_PARTY_NOTICES.md"; path = "Resources/THIRD_PARTY_NOTICES.md"; sourceTree = "<group>"; };
+		A01A00000000000000000005 /* VideoFlowKeysExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoFlowKeysExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +155,9 @@
 			children = (
 				C7842EAE2FD6F453002DC12C /* Resources */,
 				C7842EA22FD6F453002DC12C /* SafariWebExtensionHandler.swift */,
+				A01A00000000000000000005 /* VideoFlowKeysExtension.entitlements */,
+				A01A00000000000000000003 /* TypeSafeKeychain.swift */,
+				A01A00000000000000000001 /* TypeSafeService.swift */,
 				C7842EA42FD6F453002DC12C /* Info.plist */,
 			);
 			path = "Video Flow Keys Extension";
@@ -150,6 +172,13 @@
 				C7842EB22FD6F453002DC12C /* manifest.json */,
 				C7842EB32FD6F453002DC12C /* popup.css */,
 				C7842EB42FD6F453002DC12C /* content.js */,
+				A01A00000000000000000016 /* THIRD_PARTY_NOTICES.md */,
+				A01A00000000000000000015 /* youtube-page.js */,
+				A01A00000000000000000014 /* sponsor-content.js */,
+				A01A00000000000000000013 /* sponsor-playback.js */,
+				A01A00000000000000000012 /* sponsor-core.js */,
+				A01A00000000000000000011 /* background.js */,
+				A01A00000000000000000010 /* settings.js */,
 			);
 			name = Resources;
 			path = "Video Flow Keys Extension";
@@ -255,6 +284,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7842EBA2FD6F453002DC12C /* content.js in Resources */,
+				A01B00000000000000000016 /* THIRD_PARTY_NOTICES.md in Resources */,
+				A01B00000000000000000015 /* youtube-page.js in Resources */,
+				A01B00000000000000000014 /* sponsor-content.js in Resources */,
+				A01B00000000000000000013 /* sponsor-playback.js in Resources */,
+				A01B00000000000000000012 /* sponsor-core.js in Resources */,
+				A01B00000000000000000011 /* background.js in Resources */,
+				A01B00000000000000000010 /* settings.js in Resources */,
 				C7842EB92FD6F453002DC12C /* popup.css in Resources */,
 				C7842EB82FD6F453002DC12C /* manifest.json in Resources */,
 				C7842EB72FD6F453002DC12C /* icons in Resources */,
@@ -280,6 +316,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7842EA32FD6F453002DC12C /* SafariWebExtensionHandler.swift in Sources */,
+				A01A00000000000000000004 /* TypeSafeKeychain.swift in Sources */,
+				A01A00000000000000000002 /* TypeSafeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,7 +404,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -423,7 +461,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -438,9 +476,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Video Flow Keys Extension/Info.plist";
+				CODE_SIGN_ENTITLEMENTS = "Video Flow Keys Extension/VideoFlowKeysExtension.entitlements";
 				INFOPLIST_KEY_CFBundleDisplayName = "Video Flow Keys Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -448,8 +488,8 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -472,9 +512,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Video Flow Keys Extension/Info.plist";
+				CODE_SIGN_ENTITLEMENTS = "Video Flow Keys Extension/VideoFlowKeysExtension.entitlements";
 				INFOPLIST_KEY_CFBundleDisplayName = "Video Flow Keys Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -482,8 +524,8 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -522,7 +564,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -564,7 +606,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,

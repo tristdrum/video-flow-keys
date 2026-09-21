@@ -46,8 +46,30 @@
           <span>Show speed HUD</span>
         </label>
       </form>
+
+      <section class="sponsors" aria-labelledby="sponsors-title">
+        <h2 id="sponsors-title">YouTube sponsors</h2>
+        <label class="checkbox">
+          <input id="skipSponsors" name="skipSponsors" type="checkbox" form="settings-form">
+          <span>Skip sponsors automatically</span>
+        </label>
+        <p>When enabled, video titles and captions are sent to TypeSafe using your key. Amber marks show sponsor likelihood. You can undo a skip.</p>
+        <label class="key-label" for="typesafe-key">TypeSafe API key</label>
+        <input id="typesafe-key" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your own key" aria-describedby="key-status">
+        <div class="key-actions">
+          <button id="save-key" type="button">Save key</button>
+          <button id="remove-key" type="button" disabled>Remove</button>
+        </div>
+        <p id="key-status" role="status">Checking saved key…</p>
+        <p id="analysis-status" role="status">Checking video…</p>
+        <div class="key-actions">
+          <button id="undo-sponsor" type="button" disabled>Undo last skip</button>
+          <button id="retry-analysis" type="button">Try again</button>
+        </div>
+      </section>
     </main>
 
+    <script src="settings.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

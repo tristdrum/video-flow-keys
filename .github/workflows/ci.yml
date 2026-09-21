@@ -15,5 +15,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm run check
-      - run: npm test
+      - run: npm run verify
+
+  macos-checks:
+    name: macOS build and native tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check:resources
+      - run: npm run test:native
+      - run: npm run build:macos
+        env:
+          VIDEO_FLOW_KEYS_UNSIGNED: "1"
