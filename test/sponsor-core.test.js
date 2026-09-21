@@ -201,3 +201,67 @@ test("accepts content and uncertain distributions without inventing sponsor conf
   assert.equal(result[0].probability, 0.4);
   assert.equal(result[0].category, "uncertain");
 });
+
+test("cue guards leave the mixed editorial edge of a confident sponsor run unskipped", () => {
+  const classifications = [
+    { id: "s1", start: 0.08, end: 11.679, probability: 0, category: "content" },
+    { id: "s2", start: 11.679, end: 22.24, probability: 0.95, category: "sponsor" },
+    { id: "s3", start: 22.24, end: 34.32, probability: 0.94, category: "sponsor" },
+    { id: "s4", start: 34.32, end: 46.48, probability: 0.95, category: "sponsor" }
+  ];
+  const cues = [
+    { start: 11.679, end: 13.599, text: "That is always changing." },
+    { start: 13.599, end: 22.24, text: "Our sponsor sells storage." },
+    { start: 22.24, end: 34.32, text: "The commercial describes its features." },
+    { start: 34.32, end: 44.719, text: "The offer continues here." },
+    { start: 44.719, end: 46.48, text: "The final commercial phrase." }
+  ];
+  assert.deepEqual(core.safeSkipSegments(classifications, cues), [
+    { id: "s2", start: 13.599, end: 44.719, probability: 0.94, category: "sponsor" }
+  ]);
+});
+
+test("cue guards remove runs with fewer than three contained captions", () => {
+  const classification = [{ id: "s1", start: 0, end: 20, probability: 1, category: "sponsor" }];
+  for (const cues of [[], [{ start: 0, end: 20 }], [{ start: 0, end: 10 }, { start: 10, end: 20 }]]) {
+    assert.deepEqual(core.safeSkipSegments(classification, cues), []);
+  }
+});
+
+test("cue guards require whole source captions rather than clipping overlapping cues into a run", () => {
+  const classifications = [{ id: "s1", start: 2, end: 42, probability: 1, category: "sponsor" }];
+  const cues = Array.from({ length: 5 }, (_, index) => ({ start: index * 10, end: index * 10 + 10 }));
+  assert.deepEqual(core.safeSkipSegments(classifications, cues), [
+    { id: "s1", start: 20, end: 30, probability: 1, category: "sponsor" }
+  ]);
+});
+
+test("cue guards preserve original classifications and the probability heatmap", () => {
+  const classifications = [
+    { id: "s1", start: 0, end: 10, probability: 0.98, category: "sponsor" },
+    { id: "s2", start: 10.3, end: 20, probability: 0.91, category: "sponsor" }
+  ];
+  const cues = [{ start: 0, end: 5 }, { start: 5, end: 10 }, { start: 10.3, end: 15 }, { start: 15, end: 20 }];
+  const before = JSON.stringify({ classifications, cues });
+  const guarded = core.safeSkipSegments(classifications, cues);
+  assert.deepEqual(guarded, [{ id: "s1", start: 5, end: 15, probability: 0.91, category: "sponsor" }]);
+  assert.equal(JSON.stringify({ classifications, cues }), before);
+});
+
+test("low-probability and non-sponsor segments break runs even across a short time gap", () => {
+  const cues = [{ start: 0, end: 5 }, { start: 5, end: 10 }, { start: 10.1, end: 15 }, { start: 15, end: 20 }];
+  for (const middle of [{ probability: 0.89, category: "sponsor" }, { probability: 0.95, category: "uncertain" }, { probability: 0, category: "content" }]) {
+    assert.deepEqual(core.safeSkipSegments([
+      { id: "s1", start: 0, end: 10, probability: 0.99, category: "sponsor" },
+      { id: "s2", start: 10, end: 10.1, ...middle },
+      { id: "s3", start: 10.1, end: 20, probability: 0.99, category: "sponsor" }
+    ], cues), []);
+  }
+});
+
+test("cue guards decline invalid classification or caption timelines", () => {
+  const classified = [{ id: "s1", start: 0, end: 20, probability: 0.95, category: "sponsor" }];
+  for (const cues of [null, [{ start: 0, end: 10 }, { start: 9, end: 12 }], [{ start: 0, end: Infinity }], [{ start: 10, end: 0 }]]) assert.deepEqual(core.safeSkipSegments(classified, cues), []);
+  assert.deepEqual(core.safeSkipSegments([{ ...classified[0], probability: NaN }], []), []);
+  assert.deepEqual(core.safeSkipSegments(null, []), []);
+});

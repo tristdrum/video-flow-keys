@@ -6,12 +6,15 @@ TEST_DIR="$(mktemp -d "${TMPDIR:-/tmp}/video-flow-keys-native-tests.XXXXXX")"
 trap 'rm -rf "$TEST_DIR"' EXIT
 NATIVE_DIR="$ROOT_DIR/macos/Video Flow Keys/Video Flow Keys Extension"
 TEST_FRAMEWORKS="$(xcrun --show-sdk-platform-path)/Developer/Library/Frameworks"
+# Xcode 26's XCTest support dylib needs this explicit path for XCTestCore.
+TEST_PRIVATE_FRAMEWORKS="$(xcrun --show-sdk-platform-path)/Developer/Library/PrivateFrameworks"
 TEST_LIBRARIES="$(xcrun --show-sdk-platform-path)/Developer/usr/lib"
 
 xcrun swiftc -swift-version 5 \
   -F "$TEST_FRAMEWORKS" -Xlinker -rpath -Xlinker "$TEST_FRAMEWORKS" \
   -I "$TEST_LIBRARIES" -L "$TEST_LIBRARIES" -lXCTestSwiftSupport \
   -Xlinker -rpath -Xlinker "$TEST_LIBRARIES" \
+  -Xlinker -rpath -Xlinker "$TEST_PRIVATE_FRAMEWORKS" \
   "$NATIVE_DIR/TypeSafeService.swift" \
   "$NATIVE_DIR/TypeSafeKeychain.swift" \
   "$ROOT_DIR/test/native/main.swift" \

@@ -23,8 +23,10 @@ Before release, complete the approved plan's real Safari checks: ordinary
 shortcuts, editable inputs, YouTube ad transitions with speed/mute restoration,
 navigation, captions on/off/unavailable, heatmap, sponsor skip and undo. Exercise
 Red Bull's shadow-root video and iframe focus when shared playback code changes.
-Sponsor accuracy requires reviewed real sponsored videos and non-sponsored
-controls; synthetic fixtures alone do not prove it.
+Sponsor accuracy requires reviewed real sponsored videos and ordinary product
+review or non-sponsored controls; synthetic fixtures alone do not prove it.
+Review the actual guarded skip intervals, including the caption cues left
+unskipped at each run's boundaries, rather than only the classifier labels.
 
 ## Version, sign, and merge
 
@@ -35,6 +37,12 @@ controls; synthetic fixtures alone do not prove it.
   `com.tristdrum.VideoFlowKeys.Extension`, with the existing Tech Local signing
   team. Provide its team identifier through `VIDEO_FLOW_KEYS_DEVELOPMENT_TEAM`
   for signed local builds. Do not substitute an ad-hoc or personal identity.
+- The extension's own Keychain access group requires a matching embedded
+  provisioning profile. If this Mac is not registered for development, use
+  Xcode's `-allowProvisioningDeviceRegistration` only as part of an authorized
+  local install. Check signed native persistence with
+  `VIDEO_FLOW_KEYS_SIGNED_EXTENSION=/absolute/path/to/Video\ Flow\ Keys\ Extension.appex npm run test:native`;
+  this creates and deletes only a uniquely named synthetic Keychain item.
 - Publish a normal PR, complete its applicable checks and focused review, and
   merge when the plan's acceptance conditions pass. Another user approval is not
   required for the approved delivery. Build deliverables from the merged source.

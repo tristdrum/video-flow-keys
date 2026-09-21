@@ -30,6 +30,10 @@ The seek bar shows sponsor probabilities. High-probability sponsor segments are
 skipped automatically, with **Undo** to return to the skipped point. Replaying a
 skipped segment does not immediately skip it again. Missing captions, live
 streams, and failed or uncertain analysis leave normal playback working.
+Automatic skips leave the first and last caption cue of each detected sponsor
+run playing to reduce boundary mistakes; very short runs stay unskipped. The
+heatmap still shows the model's original probabilities. Detection can miss
+sponsors or be wrong, so Undo remains available.
 
 Sponsor analysis supports standard YouTube watch pages. Existing video controls
 continue to work independently. See [privacy details](docs/PRIVACY.md) before

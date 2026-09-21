@@ -260,5 +260,43 @@
     });
   }
 
-  return { MODEL, SPONSOR_THRESHOLD, LIMITS, byteLength, parseCaptions, segmentCaptions, validateSegments, buildRequests, parseAnswers };
+  function safeSkipSegments(classifications, cues) {
+    if (!Array.isArray(classifications) || !Array.isArray(cues)) return [];
+    if (cues.some((cue, index) => !plainObject(cue) || !validTime(cue.start) || !validTime(cue.end) ||
+        cue.end <= cue.start || (index > 0 && cue.start < cues[index - 1].end))) return [];
+    const runs = [];
+    let active = null;
+    let previousEnd = 0;
+    for (const segment of classifications) {
+      if (!plainObject(segment) || typeof segment.id !== "string" || !segment.id ||
+          !validTime(segment.start) || !validTime(segment.end) || segment.end <= segment.start ||
+          segment.start < previousEnd || !Number.isFinite(segment.probability) ||
+          segment.probability < 0 || segment.probability > 1) return [];
+      previousEnd = segment.end;
+      if (segment.category !== "sponsor" || segment.probability < SPONSOR_THRESHOLD) {
+        active = null;
+        continue;
+      }
+      if (active && segment.start - active.end <= 0.35) {
+        active.end = segment.end;
+        active.probability = Math.min(active.probability, segment.probability);
+      } else {
+        active = { id: segment.id, start: segment.start, end: segment.end,
+          probability: segment.probability, category: "sponsor" };
+        runs.push(active);
+      }
+    }
+    return runs.flatMap((run) => {
+      const contained = cues.filter((cue) => cue.start >= run.start && cue.end <= run.end);
+      // Classification windows can include an editorial phrase at an edge.
+      // Keep both complete boundary cues for the viewer; a short run with no
+      // interior has no automatic skip. Heatmap probabilities stay unchanged.
+      if (contained.length < 3) return [];
+      const start = contained[1].start;
+      const end = contained[contained.length - 2].end;
+      return end > start ? [{ ...run, start, end }] : [];
+    });
+  }
+
+  return { MODEL, SPONSOR_THRESHOLD, LIMITS, byteLength, parseCaptions, segmentCaptions, validateSegments, buildRequests, parseAnswers, safeSkipSegments };
 });

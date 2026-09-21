@@ -202,20 +202,53 @@ test("matching failure responses leave playback unchanged and expose sanitized s
   assert.equal(h.bar.children.length, 0);
 });
 
-test("real playback integration skips a sponsor, offers undo, and honors subsequent manual replay", async () => {
+test("playback preserves both boundary cues, skips only sponsor interior, and supports undo and replay", async () => {
   const h = createContent({ enabled: true });
-  h.dispatch();
+  h.dispatch({ captions: { events: [
+    { tStartMs: 10000, dDurationMs: 2000, segs: [{ utf8: "The review is always changing." }] },
+    { tStartMs: 12000, dDurationMs: 2000, segs: [{ utf8: "Our synthetic sponsor sells storage." }] },
+    { tStartMs: 14000, dDurationMs: 2000, segs: [{ utf8: "Their advertised drive comes in several sizes." }] },
+    { tStartMs: 16000, dDurationMs: 2000, segs: [{ utf8: "Use the sponsor link for the promotion." }] },
+    { tStartMs: 18000, dDurationMs: 2000, segs: [{ utf8: "Now back to the ordinary review." }] }
+  ] } });
   await flush();
   await h.finish();
+  // The mocked classifier labels the whole mixed window as sponsor. The
+  // integration must still preserve its first and last source captions.
   h.video.currentTime = 11;
   h.video.dispatch("timeupdate");
-  assert.equal(h.video.currentTime, 20);
+  assert.equal(h.video.currentTime, 11);
+  assert.equal(h.status().canUndo, false);
+  h.video.currentTime = 19;
+  h.video.dispatch("timeupdate");
+  assert.equal(h.video.currentTime, 19);
+  assert.equal(h.status().canUndo, false);
+  h.video.currentTime = 13;
+  h.video.dispatch("timeupdate");
+  assert.equal(h.video.currentTime, 18);
   assert.equal(h.status().canUndo, true);
   const hud = h.player.children.find((child) => child.id === "video-flow-sponsor-undo");
   assert.ok(hud);
   hud.children.find((child) => child.tagName === "button").dispatch("click");
-  assert.equal(h.video.currentTime, 11);
+  assert.equal(h.video.currentTime, 13);
   h.tick();
+  assert.equal(h.video.currentTime, 13);
+  assert.equal(h.status().canUndo, false);
+  h.video.currentTime = 14;
+  h.video.dispatch("seeking");
+  h.video.dispatch("timeupdate");
+  assert.equal(h.video.currentTime, 14);
+});
+
+test("a confident single-cue sponsor stays visible in the heatmap without an automatic seek", async () => {
+  const h = createContent({ enabled: true });
+  h.dispatch();
+  await flush();
+  await h.finish();
+  assert.equal(h.status().status, "ready");
+  assert.equal(h.bar.children[0].children.length, 1);
+  h.video.currentTime = 11;
+  h.video.dispatch("timeupdate");
   assert.equal(h.video.currentTime, 11);
   assert.equal(h.status().canUndo, false);
 });

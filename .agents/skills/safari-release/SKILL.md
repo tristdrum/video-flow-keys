@@ -15,6 +15,8 @@ it already authorizes its PR, merge, and deployment without another approval.
 - Use the configured Tech Local signing identity and preserve the existing
   app and extension bundle identifiers. An unsigned CI build proves compilation,
   not Safari installation or TestFlight eligibility.
+- Native Keychain access needs the extension's own provisioned access group;
+  use the signed Keychain smoke in the release checklist to verify persistence.
 - Replace the installed app bundle as a whole, preserving a known-good backup.
   Overlay-copying leaves stale frameworks that can invalidate its signature;
   restore the backup if verification fails.

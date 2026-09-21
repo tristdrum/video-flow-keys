@@ -89,19 +89,6 @@
       }
     }, 12000);
   }
-  function mergeSkips(values) {
-    const merged = [];
-    for (const segment of values) {
-      const last = merged[merged.length - 1];
-      if (last && last.category === "sponsor" && segment.category === "sponsor" &&
-          last.probability >= playback.THRESHOLD && segment.probability >= playback.THRESHOLD &&
-          segment.start >= last.end && segment.start - last.end <= 0.35) {
-        last.end = segment.end;
-        last.probability = Math.min(last.probability, segment.probability);
-      } else merged.push({ ...segment });
-    }
-    return merged;
-  }
   async function receive(event) {
     const message = event.data;
     if (!enabled || event.source !== root || event.origin !== root.location.origin ||
@@ -118,9 +105,11 @@
     root.clearTimeout(timeout);
     captionReceived = true;
     let segments;
+    let cues;
     try {
       if (JSON.stringify(message.captions).length > 1000000) throw new Error();
-      segments = core.segmentCaptions(core.parseCaptions(message.captions), message.duration);
+      cues = core.parseCaptions(message.captions);
+      segments = core.segmentCaptions(cues, message.duration);
     } catch (_) { status = "captions-unavailable"; return; }
     if (!segments.length) { status = "captions-unavailable"; return; }
     const ownRequest = requestId;
@@ -135,7 +124,7 @@
       return;
     }
     results = response.segments;
-    controller.setSegments(videoId, mergeSkips(results));
+    controller.setSegments(videoId, core.safeSkipSegments(results, cues));
     status = "ready";
     renderHeatmap();
     attachVideo();
